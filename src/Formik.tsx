@@ -119,6 +119,21 @@ export class Formik<Values = FormikValues> extends React.Component<
     }
   }
 
+  componentWillUpdate(
+    nextProps: Readonly<FormikConfig<Values>>,
+    nextState: Readonly<FormikState<Values>>
+  ) {
+    const prevState = this.state;
+    const { initialValues } = nextProps;
+    if (
+      this.props.onChange &&
+      nextState.values !== prevState.values &&
+      !isEqual(nextState.values, initialValues)
+    ) {
+      this.props.onChange(nextState.values, this.getFormikActions());
+    }
+  }
+
   setErrors = (errors: FormikErrors<Values>) => {
     this.setState({ errors });
   };
